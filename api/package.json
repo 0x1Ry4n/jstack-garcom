@@ -4,11 +4,6 @@
   "main": "index.js",
   "author": "Luiz Oliveira <luiiz.silverio@gmail.com>",
   "license": "MIT",
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
   "scripts": {
     "start": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
@@ -16,6 +11,11 @@
     "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
