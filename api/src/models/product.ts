@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema } from "mongoose";
 
 const productSchema = new Schema({
   name: {
@@ -17,21 +17,23 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
-  ingredients: [{
-    name: {
-      type: String,
-      required: true,
+  ingredients: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      icon: {
+        type: String,
+        required: true,
+      },
     },
-    icon: {
-      type: String,
-      required: true,
-    }
-  }],
+  ],
   category: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'Category'  // referencia o model Category
-  }
+    ref: "Category", // referencia o model Category
+  },
 });
 
-export const Product = model('Product', productSchema);
+export const Product = model("Product", productSchema);
