@@ -28,8 +28,11 @@ export function ProductModal({ visible, product, onClose, onAddToCart }: Props) 
       onRequestClose={onClose}
     >
       <S.Image
-        source={{ uri: `http://${process.env.API_URL}/uploads/${product.imagePath}`}}
-      >
+        source={{
+          uri: product.imagePath.startsWith('http')
+            ? product.imagePath
+            : `http://${process.env.API_URL}/uploads/${product.imagePath}`
+        }}      >
         <S.CloseBtn onPress={onClose}>
           <Close />
         </S.CloseBtn>

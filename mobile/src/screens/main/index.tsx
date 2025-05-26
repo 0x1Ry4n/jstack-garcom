@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 
 import { Button } from "../../components/Button";
 import { Cart } from "../../components/Cart";
@@ -10,9 +10,6 @@ import { TableModal } from "../../components/TableModal";
 import { Empty } from "../../components/Icons/Empty";
 import { Text } from "../../components/Text";
 import * as S from './styles';
-
-// import { products as mockProducts} from "../../mocks/products";
-// import { categories as mockCategories } from "../../mocks/categories";
 import { ICategory } from "../../types/Category";
 import { ICartItem } from "../../types/CartItem";
 import { IProduct } from "../../types/Product";
@@ -113,56 +110,72 @@ export function Main() {
       api.get('categories'),
       api.get('products')
     ])
-    .then((response) => {
-      setCategories(response[0].data);
-      setProducts(response[1].data);
-      setIsLoading(false);
-    })
+      .then(([categoriesRes, productsRes]) => {
+        setCategories(categoriesRes.data);
+        setProducts(productsRes.data);
+      })
+      .catch((error) => {
+        let message = 'Erro desconhecido';
+        if (error.response) {
+          message = `Erro ${error.response.status}: ${error.response.data?.message || 'Erro do servidor'}`;
+        } else if (error.request) {
+          console.error(error.request);
+          message = 'Servidor não respondeu';
+        } else {
+          message = error.message;
+        }
+        console.log(message);
+        Alert.alert("Erro", message); 
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
+
 
 
   return (
     <>
       <S.Container>
         <Header selectedTable={selTable} onCancel={handleResetOrder} />
-          {
-            isLoading ? (
-              <S.CenterContainer>
-                <ActivityIndicator color="#ccc" size="large" />
-              </S.CenterContainer>
+        {
+          isLoading ? (
+            <S.CenterContainer>
+              <ActivityIndicator color="#ccc" size="large" />
+            </S.CenterContainer>
 
-            ) : (
+          ) : (
 
-              <>
-                <S.CategoriesContainer>
-                  <Categories
-                    categories={categories}
-                    onSelect={handleSelectCategory}
-                  />
-                </S.CategoriesContainer>
+            <>
+              <S.CategoriesContainer>
+                <Categories
+                  categories={categories}
+                  onSelect={handleSelectCategory}
+                />
+              </S.CategoriesContainer>
 
-                {
-                  products.length > 0 ? (
-                    <S.MenuContainer>
-                      <Menu
-                        onAddToCart={handleAddToCart}
-                        products={products}
-                      />
-                    </S.MenuContainer>
+              {
+                products.length > 0 ? (
+                  <S.MenuContainer>
+                    <Menu
+                      onAddToCart={handleAddToCart}
+                      products={products}
+                    />
+                  </S.MenuContainer>
 
-                  ) : (
+                ) : (
 
-                    <S.CenterContainer>
-                      <Empty />
-                      <Text  color="#666" style={{ marginTop: 24 }}>
-                        Nenhum produto foi encontrado!
-                      </Text>
-                    </S.CenterContainer>
-                  )
+                  <S.CenterContainer>
+                    <Empty />
+                    <Text color="#666" style={{ marginTop: 24 }}>
+                      Nenhum produto foi encontrado!
+                    </Text>
+                  </S.CenterContainer>
+                )
               }
-              </>
-            )
-          }
+            </>
+          )
+        }
 
       </S.Container>
 

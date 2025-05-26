@@ -39,11 +39,15 @@ export function Menu({ onAddToCart, products }: Props) {
         renderItem={({ item: product }) => (
           <S.Product onPress={() => handleOpenModal(product)}>
             <S.ProductImage
-              source={{ uri: `http://${process.env.API_URL}/uploads/${product.imagePath}`}}
+              source={{
+                uri: product.imagePath.startsWith('http')
+                  ? product.imagePath
+                  : `http://${process.env.API_URL}/uploads/${product.imagePath}`
+              }}
             />
             <S.ProductDetails>
               <Text weight="600">{product.name}</Text>
-              <Text size={14} color="#666" style={{marginVertical: 8}}>
+              <Text size={14} color="#666" style={{ marginVertical: 8 }}>
                 {product.description}
               </Text>
               <Text size={14} weight="600">R$ {product.price.toFixed(2)}</Text>
