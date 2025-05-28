@@ -7,7 +7,7 @@ interface ProductInput {
   quantity: number;
 }
 
-interface CreateOrderRequest {
+interface CreateOrder {
   table: string;
   products: ProductInput[];
 }
@@ -15,7 +15,7 @@ interface CreateOrderRequest {
 export class CreateOrderUseCase {
   constructor(private readonly orderRepo: IOrderRepository) {}
 
-  async execute(data: CreateOrderRequest): Promise<Order> {
+  async execute(data: CreateOrder): Promise<Order> {
     const products = data.products.map(p => ({
       product: new Product("", "", "", 0, null!, [], p.productId),
       quantity: p.quantity

@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import { CreateIngredientUseCase } from '../../../application/use-cases/ingredient/create-ingredient.use-case';
 import { ListIngredientUseCase } from '../../../application/use-cases/ingredient/list-ingredients.use-case';
 import { IngredientRepositoryImpl } from '../../../infrastructure/database/mongoose/ingredient/ingredient.repository.impl';
+import { CategoryRepositoryImpl } from '../../../infrastructure/database/mongoose/category/category.repository.impl';
 
 const ingredientRepo = new IngredientRepositoryImpl();
+const categoryRepo = new CategoryRepositoryImpl();
 
-const createIngredientUseCase = new CreateIngredientUseCase(ingredientRepo);
+const createIngredientUseCase = new CreateIngredientUseCase(categoryRepo, ingredientRepo);
 const listIngredientUseCase = new ListIngredientUseCase(ingredientRepo);
 
 export async function createIngredientController(req: Request, res: Response) {

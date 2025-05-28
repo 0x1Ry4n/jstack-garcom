@@ -8,15 +8,15 @@ export const ProductMapper = {
 
     const category = doc.category
       ? new Category(
-          doc.category._id.toString(),
-          doc.category.name,
-          doc.category.icon
+        doc.category.name,
+        doc.category.icon,
+        doc.category.id.toString(),
         )
       : null;
 
     const ingredients: IngredientQuantity[] = (doc.ingredients || []).map((item: any) => {
       return new IngredientQuantity(
-        item.ingredient._id.toString(),
+        item.ingredient,
         item.quantity,
         item.unit
       );
@@ -29,7 +29,7 @@ export const ProductMapper = {
       doc.price,
       category!,
       ingredients,
-      doc._id?.toString() ?? null,
+      doc.id?.toString() ?? null,
     );
   },
 

@@ -14,3 +14,5 @@ export const createProductSchema = z.object({
         unit: z.string().min(1, "Unidade não pode estar vazia")
     }))
 });
+
+export type CreateProductData = z.infer<typeof createProductSchema>;

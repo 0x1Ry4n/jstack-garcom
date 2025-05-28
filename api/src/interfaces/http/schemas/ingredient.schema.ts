@@ -7,3 +7,5 @@ export const createIngredientSchema = z.object({
     category: objectId,
     description: z.string().min(30).max(200).optional()
 });
+
+export type CreateIngredientData = z.infer<typeof createIngredientSchema>;

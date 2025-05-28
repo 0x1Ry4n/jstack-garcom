@@ -9,5 +9,7 @@ export const createOrderSchema = z.object({
     products: z.array(z.object({
         product: objectId,
         quantity: z.number().positive().min(1).default(1)
-    }))
+    })).min(1)
 });
+
+export type CreateOrderData = z.infer<typeof createOrderSchema>;

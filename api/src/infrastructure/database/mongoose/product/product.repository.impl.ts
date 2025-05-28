@@ -8,17 +8,16 @@ export class ProductRepositoryImpl implements IProductRepository {
         const raw = ProductMapper.toPersistence(product);
         const createdDoc = await ProductModel.create(raw);
 
-        await createdDoc.populate('product');
         return ProductMapper.toEntity(createdDoc);
     }
 
     async findById(id: string): Promise<Product> {
-        const doc = await ProductModel.findById(id).populate('product').exec();
+        const doc = await ProductModel.findById(id);
         return ProductMapper.toEntity(doc);
     }
 
     async list(): Promise<Product[]> {
-        const docs = await ProductModel.find().populate('product').exec();
+        const docs = await ProductModel.find().populate('category').populate('ingredients.ingredient').exec();
         return docs.map(doc => ProductMapper.toEntity(doc));
     }
 }

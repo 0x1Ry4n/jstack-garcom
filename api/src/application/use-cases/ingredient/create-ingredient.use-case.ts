@@ -1,18 +1,22 @@
-import { Category }   from   "../../../domain/category/category.entity";
+import { Category } from "../../../domain/category/category.entity";
 import { Ingredient } from "../../../domain/ingredient/ingredient.entity";
+import { ICategoryRepository } from "../../../domain/category/category.repository";
 import { IIngredientRepository } from "../../../domain/ingredient/ingredient.repository";
-
-interface CreateIngredientRequest {
-    name: string, 
-    category: Category,
-    description: string
-}
+import { CreateIngredientData } from '../../../interfaces/http/schemas/ingredient.schema';
 
 export class CreateIngredientUseCase {
-    constructor(private readonly ingredientRepo: IIngredientRepository) {}
+    constructor(
+        private readonly categoryRepo: ICategoryRepository,
+        private readonly ingredientRepo: IIngredientRepository
+    ) { }
 
-    async execute(data: CreateIngredientRequest): Promise<Ingredient> {
-        const ingredient = new Ingredient(data.name, data.category, data.description)
+    async execute(data: CreateIngredientData): Promise<Ingredient> {
+        const category = await this.categoryRepo.findById(data.category);
+        if (!category) {
+            throw new Error('Categoria não encontrada');
+        }
+
+        const ingredient = new Ingredient(data.name, category, data.description)
         return await this.ingredientRepo.create(ingredient);
     }
 }

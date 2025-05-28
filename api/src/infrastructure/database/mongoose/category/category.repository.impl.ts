@@ -17,6 +17,11 @@ export class CategoryRepositoryImpl implements ICategoryRepository {
     return categories.map((doc) => CategoryMapper.toEntity(doc));
   }
 
+  async findById(id: string): Promise<Category> {
+    const category = await CategoryModel.findById(id);
+    return CategoryMapper.toEntity(category);
+  }
+
   async listProductsByCategory(categoryId: String): Promise<Product[]> {
     const products = await ProductModel.where('category', categoryId);
 
